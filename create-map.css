@@ -1,0 +1,371 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+}
+
+textarea {
+    height: 200px;
+}
+
+h1 {
+    font-size: 16px;
+}
+
+h2 {
+    padding: 0;
+    margin: 10px;
+}
+
+h3 {
+    margin: 15px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: grey;
+}
+
+h4 {
+    font-family: 'Raleway', sans-serif;
+    text-align: left;
+}
+
+p {
+    margin-top: 0;
+    padding-top: 0;
+    font-size: 13px;
+}
+
+button {
+    margin: 5px;
+}
+
+a {
+    text-decoration: none;
+    color: grey;
+}
+
+a:hover{
+    font-size: 14px;
+    color: black;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 300;
+}
+
+
+/*          classes and id's             */
+
+.innerHTML {
+    text-align: center;
+}
+
+#map {
+    height: 100%;
+    z-index: 10;
+}
+
+#description {
+    font-size: 15px;
+    font-weight: 300;
+}
+
+#infowindow-content .title {
+    font-weight: bold;
+}
+
+#infowindow-content {
+    display: none;
+}
+
+#map #infowindow-content {
+    display: inline;
+}
+
+.pac-card {
+    margin: 10px 10px 0 0;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+}
+
+#pac-container {
+    padding-bottom: 12px;
+    margin-right: 12px;
+}
+
+.pac-controls {
+    display: inline-block;
+    padding: 5px 11px;
+}
+
+.pac-controls{
+    font-size: 13px;
+    font-weight: 300;
+}
+
+#pac-input {
+    margin: 10px;
+    margin-left: 550px;
+    border-radius: 20px;
+    background-color: #fff;
+    font-size: 15px;
+    font-weight: 300;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 300px;
+    height: 30px;
+    border: none;
+    box-shadow: 2px 2px 2px grey;
+}
+
+#pac-input:focus {
+    border-color: #4d90fe;
+}
+
+#title {
+    color: #fff;
+    background-color: #4d90fe;
+    font-size: 25px;
+    font-weight: 500;
+    padding: 6px 12px;
+}
+
+#target {
+    width: 345px;
+}
+
+/*-----------------------------------------------------*/
+
+.menu {
+    font-family: 'Raleway', sans-serif;
+    position: absolute;
+    top: 0;
+    z-index: 1000;
+    width: 300px;
+    height: auto;
+    background-color: white;
+    margin: 30px;
+
+}
+
+.top-click {
+    padding: 10px;
+    font-size: 12px;
+    border-bottom: solid 1px grey;
+}
+
+.step-title {
+    padding: 15px;
+    padding-top: 0;
+}
+
+.my-buttons {
+    padding: 20px;
+    text-align: center;
+}
+
+#myBtn-1, #myBtn-3 {
+    font-family: 'Raleway', sans-serif;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    width:110px;
+    height: 30px;
+    cursor: pointer;
+}
+
+#delete-marker {
+    font-family: 'Raleway', sans-serif;
+    background-color: #fff;
+    font-size: 10px;
+    color: black;
+    border: solid 1px black;
+    border-radius: 20px;
+    width:20px;
+    height: 28px;
+    cursor: pointer;
+}
+
+#delete-marker, #add-new-marker {
+    font-family: 'Raleway', sans-serif;
+    background-color: #fff;
+    font-size: 10px;
+    color: black;
+    border: solid 1px black;
+    border-radius: 20px;
+    width:90px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#myBtn-2 {
+    font-family: 'Raleway', sans-serif;
+    background-color: white;
+    color: black;
+    border: solid black 1px;
+    border-radius: 20px;
+    width:110px;
+    height: 30px;
+    cursor: pointer;
+}
+
+#myBtn-2:hover {
+    box-shadow: 3px 3px 3px grey;
+}
+
+#myBtn-1:hover, #myBtn-3:hover, #myBtn-4:hover {
+    box-shadow: 3px 3px 3px grey;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4) }
+
+.modal-content {
+    margin-top: 5%;
+    margin-left: 27%;
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form-control {
+    border: solid 1px grey;
+    width: 580px;
+
+}
+
+.step-title-input {
+    height: 40px;
+}
+
+
+/*--------Marker style and color below----------*/
+
+
+#marker-style-1{}
+
+#marker-style-2{}
+
+#marker-style-3{}
+
+#marker-style-4{}
+
+#marker-style-5{}
+
+#blue-marker {
+     font-family: 'Raleway', sans-serif;
+     background-color: #0000FF;
+     font-size: 10px;
+     color: black;
+     border: none;
+     border-radius: 20px;
+     width: 15px;
+     height: 15px;
+     cursor: pointer;
+ }
+
+#green-marker {
+    font-family: 'Raleway', sans-serif;
+    background-color: limegreen;
+    font-size: 10px;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+#yellow-marker {
+     font-family: 'Raleway', sans-serif;
+     background-color: yellow;
+     font-size: 10px;
+     color: black;
+     border: none;
+     border-radius: 20px;
+     width: 15px;
+     height: 15px;
+     cursor: pointer;
+ }
+
+#purple-marker {
+    font-family: 'Raleway', sans-serif;
+    background-color: purple;
+    font-size: 10px;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+#black-marker {
+    font-family: 'Raleway', sans-serif;
+    background-color: black;
+    font-size: 10px;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+#grey-marker {
+    font-family: 'Raleway', sans-serif;
+    background-color: grey;
+    font-size: 10px;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+#red-marker{
+    font-family: 'Raleway', sans-serif;
+    background-color: red;
+    font-size: 10px;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+
+
