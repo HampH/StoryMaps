@@ -1,6 +1,40 @@
 
-//Map initialization
+let ZaffriModal = Vue.component('zaffri-modal', {
+    template: "#zaffri-modal-template",
+    props: ['data'],
+    methods: {
+        closeModal: function(action = null) {
+            this.data.visible = false;
+            console.log("Modal action = " + action);
+        }
+    }
+});
 
+
+let app = new Vue({
+    el: "#app",
+    data: {
+        modalVisible: false,
+        modalConfig: {
+            visible: false,
+            type: "confirm",
+            title1: "Step title",
+            title2: "Step description",
+            confirmText: "OK",
+            cancelText: "Cancel",
+        }
+    },
+    methods: {
+        openModal: function() {
+            this.modalConfig.visible = true;
+        }
+    }
+
+
+});
+
+
+//Map initialization
 function initMap() {
     let map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 50, lng: 1},
@@ -17,9 +51,10 @@ function initMap() {
     let currentMarker;
     let currentInfowindow;
     let addNewMarkerClicked = false;
+    let color = 'red';
+    let type = 'original';
 
     //Several functions including adding marker when button 'Yes' clicked / Deleting individual marker when button 'Delete marker' clicked
-
     function placeMarker(location) {
         let marker;
         let infowindow;
@@ -32,6 +67,11 @@ function initMap() {
                 map: map
             });
             currentMarker = marker;
+            marker.setIcon({
+                url: '../images/' + color + '-' + type + '-marker.png',
+                size: new google.maps.Size(30, 38),
+                scaledSize: new google.maps.Size(30, 38)
+            });
         }
 
         let contentElement = document.createElement("div");
@@ -39,44 +79,51 @@ function initMap() {
             '<button id="add-new-marker">Yes</button></div>';
 
         let editElement = document.createElement("div");
-        editElement.innerHTML = '<div class="innerHTML">' +
-            '<br><h4>Style your marker</h4>' +
-            '<input alt="image" type="image" src="../images/original-marker.png" name="marker" id="original-marker" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/exclamation-marker.png" name="marker" id="exclamation-marker" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/question-marker.png" name="marker" id="question-marker" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/x-marker.png" name="marker" id="x-marker" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/empty-marker.png" name="marker" id="empty-marker" /> ' + ' ' +
+        editElement.innerHTML = '<div class="innerHTML" style="text-align: center">' +
+            '<br><h4 style="padding-top: 0; padding-left: 10px; padding-right: 10px; margin-top: 0;">Style your marker</h4>' +
+            '<div class="marker-style"> ' +
+            '<input alt="image" type="image" src="../images/black-original-marker.png" style="width: 30px; height:38px;" name="marker" id="original" /> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-exclamation-marker.png" style="width: 30px; height:38px;"  name="marker" id="exclamation" /> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-question-marker.png" style="width: 30px; height:38px;"  name="marker" id="question" /> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-x-marker.png" style="width: 30px; height:38px;"  name="marker" id="x" /> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-empty-marker.png" style="width: 30px; height:38px;"  name="marker" id="empty" /></div> ' + ' ' +
             '<br><h4>Color</h4>' +
-            '<button id="blue-marker"> </button> ' +
-            '<button id="green-marker"> </button> ' +
-            '<button id="yellow-marker"> </button> ' +
-            '<button id="purple-marker"> </button> ' +
-            '<br><button id="black-marker"> </button> ' +
-            '<button id="grey-marker"> </button> ' +
-            '<button id="red-marker"> </button> ' +
+            '<div class="marker-colors">' +
+            '<button id="blue"> </button> ' +
+            '<button id="green"> </button> ' +
+            '<button id="yellow"> </button> ' +
+            '<button id="purple"> </button> ' +
+            '<br><button id="black"> </button> ' +
+            '<button id="grey"> </button> ' +
+            '<button id="red"> </button></div>' +
+
             '<br><button id="delete-marker">delete</button>';
 
-
-        editElement.addEventListener('click', function(event) {
+        editElement.querySelector('.marker-style').addEventListener('click', function(event) {
             if (event.target.tagName === 'INPUT') {
+                type = event.target.id;
+
                 marker.setIcon({
-                    url: '../images/' + event.target.id + '.png',
+                    url: '../images/' + color + '-' + type + '-marker.png',
                     size: new google.maps.Size(30, 38),
                     scaledSize: new google.maps.Size(30, 38)
                 });
+                console.log(event.target.id);
             }
         })
 
-        editElement.addEventListener('click', function(event) {
+        editElement.querySelector('.marker-colors').addEventListener('click', function(event) {
             if (event.target.tagName === 'BUTTON') {
+                color = event.target.id;
+
                 marker.setIcon({
-                        url: '../images/' + event.target.id + '.png',
+                        url: '../images/' + color + '-' + type + '-marker.png',
                         size: new google.maps.Size(30, 38),
                         scaledSize: new google.maps.Size(30, 38)
                     });
+                console.log(event.target.id);
             }
         })
-
 
         if (currentInfowindow && !addNewMarkerClicked) {
             infowindow = currentInfowindow;
@@ -108,7 +155,6 @@ function initMap() {
     });
 
 //Search bar function with autocomplete feature, marker added to location entered in the search bar.
-
     let input = document.getElementById('pac-input');
     let searchBox = new google.maps.places.SearchBox(input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);

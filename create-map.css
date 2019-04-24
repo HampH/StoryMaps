@@ -19,15 +19,12 @@ h2 {
 }
 
 h3 {
-    margin: 15px;
-    margin-bottom: 5px;
     text-align: left;
     color: grey;
 }
 
 h4 {
     font-family: 'Raleway', sans-serif;
-    text-align: left;
 }
 
 p {
@@ -60,6 +57,7 @@ label {
 
 .innerHTML {
     text-align: center;
+    padding: 10px;
 }
 
 #map {
@@ -283,7 +281,7 @@ label {
 
 #marker-style-5{}
 
-#blue-marker {
+#blue {
      font-family: 'Raleway', sans-serif;
      background-color: #0000FF;
      font-size: 10px;
@@ -295,7 +293,7 @@ label {
      cursor: pointer;
  }
 
-#green-marker {
+#green{
     font-family: 'Raleway', sans-serif;
     background-color: limegreen;
     font-size: 10px;
@@ -307,7 +305,7 @@ label {
     cursor: pointer;
 }
 
-#yellow-marker {
+#yellow {
      font-family: 'Raleway', sans-serif;
      background-color: yellow;
      font-size: 10px;
@@ -319,7 +317,7 @@ label {
      cursor: pointer;
  }
 
-#purple-marker {
+#purple {
     font-family: 'Raleway', sans-serif;
     background-color: purple;
     font-size: 10px;
@@ -331,7 +329,7 @@ label {
     cursor: pointer;
 }
 
-#black-marker {
+#black {
     font-family: 'Raleway', sans-serif;
     background-color: black;
     font-size: 10px;
@@ -343,7 +341,7 @@ label {
     cursor: pointer;
 }
 
-#grey-marker {
+#grey {
     font-family: 'Raleway', sans-serif;
     background-color: grey;
     font-size: 10px;
@@ -355,7 +353,7 @@ label {
     cursor: pointer;
 }
 
-#red-marker{
+#red{
     font-family: 'Raleway', sans-serif;
     background-color: red;
     font-size: 10px;
@@ -367,5 +365,10 @@ label {
     cursor: pointer;
 }
 
+.root{
+    display: block;
+}
 
 
+
+/*----------Modal------------*/
