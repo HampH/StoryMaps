@@ -5,11 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="../create-map.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script src="https://unpkg.com/marked@0.3.6"></script>
-    <script src="https://unpkg.com/lodash@4.16.0"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-Bx4pytHkyTDy3aJKjGkGoHPt3tvv6zlwwjc3iqN7ktaiEMLDPqLSZYts2OjKcBx1" crossorigin="anonymous">    <link rel="stylesheet" href="../create-map.css">
 </head>
 <body>
 
@@ -17,13 +13,58 @@
 
 <div id="map"></div>
 
-<div class="menu">
+<div id="menu">
 
-    <div class="top-click"><a href="index.html"> <i class="fas fa-chevron-left"></i> Browse more StoryMaps </a></div>
+    <div class="top-buttons">
+        <button id="myBtn-1" onclick="location.href='index.html'"> <i class="far fa-save"></i> Save </button>
+        <button id="myBtn-2" onclick="location.href='index.html'"> <i class="far fa-eye"></i> Preview </button>
     </div>
 
-<script src="../index.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
+    <div id="app">
+        <div>
+            <input id="input-title" type="text" v-model="user.mapTitle" :disabled="!isEditing" :class="{view: !isEditing}">
+        </div>
+
+        <div>
+            <input id="input-description" type="text" v-model="user.mapDescription" :disabled="!isEditing" :class="{view: !isEditing}">
+        </div>
+        <button id="myBtn-3" @click="isEditing = !isEditing" v-if="!isEditing"><i class="far fa-pencil"></i></button>
+        <button class="generic" @click="save" v-else-if="isEditing">Save</button>
+        <button class="generic" @click="cancel" v-if="isEditing">Cancel</button>
+
+        <ul>
+            <li style="list-style:none" v-for="step in steps">
+                <h4 class="step-title">{{ step.title }}</h4><br>
+                <p class="step-description">{{ step.description }}</p>
+            </li>
+        </ul>
+
+
+        <div class="addStep-button">
+            <button id="myBtn">Add step</button>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+
+                <form v-on:submit.prevent="addNewStep">
+                    <h3>Step title</h3>
+                    <input class="addTitle" placeholder="Add the title to your step" v-model="step.title"/>
+                    <h3>Step description</h3>
+                    <textarea class="addDescription" placeholder="Don't forget your description" v-model="step.description"></textarea><br>
+                    <div class="OK-cancel-buttons">
+                        <button class="generic" type="submit">OK</button>
+                        <span class="close">Cancel</span>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.min.js"></script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../index.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaNv0j-dS57AWtwnTJ93mWIXJrINNZg4w&libraries=places&callback=initMap" async defer></script>
 </body>
 </html>
