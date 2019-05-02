@@ -25,6 +25,8 @@ h3 {
 
 h4 {
     font-family: 'Raleway', sans-serif;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 p {
@@ -33,31 +35,15 @@ p {
     font-size: 13px;
 }
 
-button {
-    margin: 5px;
-}
-
-a {
-    text-decoration: none;
-    color: grey;
-}
-
-a:hover{
-    font-size: 14px;
-    color: black;
-}
-
 label {
     font-size: 13px;
     font-weight: 300;
 }
 
-
 /*          classes and id's             */
 
 .innerHTML {
     text-align: center;
-    padding: 10px;
 }
 
 #map {
@@ -140,7 +126,7 @@ label {
 
 /*-----------------------------------------------------*/
 
-.menu {
+#menu {
     font-family: 'Raleway', sans-serif;
     position: absolute;
     top: 0;
@@ -149,6 +135,8 @@ label {
     height: auto;
     background-color: white;
     margin: 30px;
+    box-sizing: border-box;
+    padding: 10px;
 
 }
 
@@ -158,25 +146,89 @@ label {
     border-bottom: solid 1px grey;
 }
 
-.step-title {
-    padding: 15px;
-    padding-top: 0;
+.top-buttons{
+    text-align: center;
+    margin-top: 10px;
 }
 
-.my-buttons {
-    padding: 20px;
+.addStep-button {
     text-align: center;
 }
 
-#myBtn-1, #myBtn-3 {
+#myBtn{
     font-family: 'Raleway', sans-serif;
+    color: black;
+    background-color: white;
+    border-radius: 20px;
+    width:270px;
+    height:30px;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#myBtn-1{
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    background-color: black;
+    border-radius: 20px;
+    width:120px;
+    height:25px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#myBtn-2{
+    font-family: 'Raleway', sans-serif;
+    color: black;
+    background-color: white;
+    border-radius: 20px;
+    width:120px;
+    height:25px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#myBtn-3{
+    margin-top: -63px;
+    float: right;
+    border: none;
+    font-size: 15px;
+}
+
+.close {
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    background-color: black;
+    border-radius: 30px;
+    padding: 3px;
+    padding-left: 30px;
+    padding-right: 30px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+.generic {
+    font-size: 13px;
+    font-family: 'Raleway', sans-serif;
+    color: black;
+    background-color: white;
+    border-radius: 20px;
+    margin-top: 10px;
+    width:90px;
+    height:20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#myBtn-1:hover {
+    background-color: white;
+    color: black;
+}
+
+#myBtn-2:hover {
     background-color: black;
     color: white;
-    border: none;
-    border-radius: 20px;
-    width:110px;
-    height: 30px;
-    cursor: pointer;
 }
 
 #delete-marker {
@@ -203,83 +255,11 @@ label {
     cursor: pointer;
 }
 
-#myBtn-2 {
-    font-family: 'Raleway', sans-serif;
-    background-color: white;
-    color: black;
-    border: solid black 1px;
-    border-radius: 20px;
-    width:110px;
-    height: 30px;
+.fa-pencil {
     cursor: pointer;
 }
-
-#myBtn-2:hover {
-    box-shadow: 3px 3px 3px grey;
-}
-
-#myBtn-1:hover, #myBtn-3:hover, #myBtn-4:hover {
-    box-shadow: 3px 3px 3px grey;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4) }
-
-.modal-content {
-    margin-top: 5%;
-    margin-left: 27%;
-    background-color: #fefefe;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 600px;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.form-control {
-    border: solid 1px grey;
-    width: 580px;
-
-}
-
-.step-title-input {
-    height: 40px;
-}
-
 
 /*--------Marker style and color below----------*/
-
-
-#marker-style-1{}
-
-#marker-style-2{}
-
-#marker-style-3{}
-
-#marker-style-4{}
-
-#marker-style-5{}
 
 #blue {
      font-family: 'Raleway', sans-serif;
@@ -365,10 +345,78 @@ label {
     cursor: pointer;
 }
 
-.root{
-    display: block;
+.view {
+    border-color: transparent;
+    background-color: initial;
+    color: initial
 }
 
+#input-title, #input-description{
+    width: 250px;
+    height: 30px;
+    font-family: 'Raleway', sans-serif;
+}
 
+#input-description {
+    font-size: 14px;
+}
 
-/*----------Modal------------*/
+#input-title {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 700;
+
+}
+
+/*           Modal           */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    height:400px;
+}
+
+/*-------------------------------*/
+
+.addDescription{
+    width: 592px;
+}
+
+.addTitle {
+    width: 592px;
+    height: 30px;
+    border: solid 1px black;
+}
+
+.OK-cancel-buttons {
+    text-align: right;
+}
+
+.step-title, .step-description{
+    margin: 0;
+    padding: 0;
+}
+
+.step-description {
+    margin-top: -20px;
+    margin-bottom: 15px;
+
+}

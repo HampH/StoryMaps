@@ -1,37 +1,69 @@
-
-let ZaffriModal = Vue.component('zaffri-modal', {
-    template: "#zaffri-modal-template",
-    props: ['data'],
-    methods: {
-        closeModal: function(action = null) {
-            this.data.visible = false;
-            console.log("Modal action = " + action);
-        }
-    }
-});
-
-
-let app = new Vue({
-    el: "#app",
+new Vue({
+    el: '#app',
     data: {
-        modalVisible: false,
-        modalConfig: {
-            visible: false,
-            type: "confirm",
-            title1: "Step title",
-            title2: "Step description",
-            confirmText: "OK",
-            cancelText: "Cancel",
-        }
+        isEditing: false,
+        user: {
+            mapTitle: 'Add a title to your map',
+            mapDescription: 'Add a description to your map',
+        },
+        steps: [{title:"", description:""}],
+        step: {title:"", description:""}
+    },
+
+    mounted() {
+        this.cachedUser = Object.assign({}, this.user);
     },
     methods: {
-        openModal: function() {
-            this.modalConfig.visible = true;
+
+        save() {
+            this.cachedUser = Object.assign({}, this.user);
+            this.isEditing = false;
+
+        },
+        cancel() {
+            this.user = Object.assign({}, this.cachedUser);
+            this.isEditing = false;
+        },
+
+        addNewStep() {
+            let newStep = {
+                title: this.step.title,
+                description: this.step.description
+            };
+
+            this.steps.push(newStep);
         }
+
     }
-
-
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+let modal = document.getElementById('myModal');
+let btn = document.getElementById("myBtn");
+let span = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+    modal.style.display = "block";
+};
+span.onclick = function() {
+    modal.style.display = "none";
+};
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+};
 
 
 //Map initialization
@@ -54,7 +86,6 @@ function initMap() {
     let color = 'red';
     let type = 'original';
 
-    //Several functions including adding marker when button 'Yes' clicked / Deleting individual marker when button 'Delete marker' clicked
     function placeMarker(location) {
         let marker;
         let infowindow;
@@ -64,29 +95,31 @@ function initMap() {
         } else {
             marker = new google.maps.Marker({
                 position: location,
-                map: map
+                map: map,
             });
             currentMarker = marker;
             marker.setIcon({
                 url: '../images/' + color + '-' + type + '-marker.png',
                 size: new google.maps.Size(30, 38),
-                scaledSize: new google.maps.Size(30, 38)
+                scaledSize: new google.maps.Size(30, 38),
             });
         }
-
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map,this);
+        });
         let contentElement = document.createElement("div");
         contentElement.innerHTML = '<div class="innerHTML"><h4>Want to place a marker?</h4>'+
             '<button id="add-new-marker">Yes</button></div>';
 
         let editElement = document.createElement("div");
         editElement.innerHTML = '<div class="innerHTML" style="text-align: center">' +
-            '<br><h4 style="padding-top: 0; padding-left: 10px; padding-right: 10px; margin-top: 0;">Style your marker</h4>' +
+            '<br><h4 style="padding:0; padding-left: 5px; padding-right: 5px; margin-top: 0;">Style your marker</h4>' +
             '<div class="marker-style"> ' +
-            '<input alt="image" type="image" src="../images/black-original-marker.png" style="width: 30px; height:38px;" name="marker" id="original" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/black-exclamation-marker.png" style="width: 30px; height:38px;"  name="marker" id="exclamation" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/black-question-marker.png" style="width: 30px; height:38px;"  name="marker" id="question" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/black-x-marker.png" style="width: 30px; height:38px;"  name="marker" id="x" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/black-empty-marker.png" style="width: 30px; height:38px;"  name="marker" id="empty" /></div> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-original-marker.png" style="width:17px; height:23px;" name="marker" id="original" /> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-exclamation-marker.png" style="width:17px; height:23px;"  name="marker" id="exclamation" /> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-question-marker.png" style="width:17px; height:23px;"  name="marker" id="question" /> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-x-marker.png" style="width:17px; height:23px;"  name="marker" id="x" /> ' + ' ' +
+            '<input alt="image" type="image" src="../images/black-empty-marker.png" style="width:17px; height:23px;"  name="marker" id="empty" /></div> ' + ' ' +
             '<br><h4>Color</h4>' +
             '<div class="marker-colors">' +
             '<button id="blue"> </button> ' +
@@ -128,10 +161,13 @@ function initMap() {
         if (currentInfowindow && !addNewMarkerClicked) {
             infowindow = currentInfowindow;
             infowindow.setContent(contentElement);
+
         }
         else {
             infowindow = new google.maps.InfoWindow({
-                content: contentElement
+                content: contentElement,
+                buttons: { close: { visible: false } }
+
             });
             infowindow.open(map, marker);
             currentInfowindow = infowindow;
@@ -152,9 +188,13 @@ function initMap() {
     }
     google.maps.event.addListener(map, 'click', function(event) {
         placeMarker(event.latLng);
+
     });
 
+
+
 //Search bar function with autocomplete feature, marker added to location entered in the search bar.
+
     let input = document.getElementById('pac-input');
     let searchBox = new google.maps.places.SearchBox(input);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
