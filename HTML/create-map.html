@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="EN-en SV-sv" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="EN-en SV-sv" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>Map-app</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
@@ -32,32 +32,38 @@
         <button class="generic" @click="save" v-else-if="isEditing">Save</button>
         <button class="generic" @click="cancel" v-if="isEditing">Cancel</button>
 
-        <ul>
-            <li style="list-style:none" v-for="step in steps">
-                <h4 class="step-title">{{ step.title }}</h4><br>
-                <p class="step-description">{{ step.description }}</p>
+
+        <ul style="counter-reset: item;">
+            <li style="display: block;" v-for="(step, idx) in steps"  v-on:click="toggle(idx)" v-bind:checked="step.done" :class="{'active-li': idx == activeIndex}">
+
+                <h4 class="step-title">{{ step.title }}<i class="far fa-pencil" @click="edit(idx)"></i></h4><br>
+                <p class="step-description" >{{ step.description }}</p>
+
             </li>
         </ul>
 
+        <transition name="modal" @close='showModal = !showModal'>
+            <div class="modal-mask" v-show="showModal">
+                <div class="modal-wrapper">
+                    <div class="modal-container">
+                        <form v-on:submit.prevent="addNewStep">
+                            <h3>Step title</h3>
+                            <input class="addTitle" placeholder="Add the title to your step" v-model="step.title"/>
+                            <h3>Step description</h3>
+                            <textarea class="addDescription" placeholder="Don't forget your description" v-model="step.description"></textarea><br>
+                            <div class="OK-cancel-buttons">
+                                <button class="generic" type="submit">OK</button>
+                                <span class="close" @click="cancelModal">Cancel</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
 
         <div class="addStep-button">
-            <button id="myBtn">Add step</button>
-        </div>
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-
-                <form v-on:submit.prevent="addNewStep">
-                    <h3>Step title</h3>
-                    <input class="addTitle" placeholder="Add the title to your step" v-model="step.title"/>
-                    <h3>Step description</h3>
-                    <textarea class="addDescription" placeholder="Don't forget your description" v-model="step.description"></textarea><br>
-                    <div class="OK-cancel-buttons">
-                        <button class="generic" type="submit">OK</button>
-                        <span class="close">Cancel</span>
-                    </div>
-                </form>
-
-            </div>
+            <button id="myBtn" @click="showModal = true">Add step</button>
         </div>
     </div>
 </div>
