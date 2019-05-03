@@ -1,20 +1,34 @@
+Vue.component('modal', {
+    template: '#modal-template'
+});
+
 new Vue({
     el: '#app',
     data: {
+        activeIndex: null,
+        editIndex: null,
+        showModal: false,
         isEditing: false,
         user: {
             mapTitle: 'Add a title to your map',
             mapDescription: 'Add a description to your map',
         },
-        steps: [{title:"", description:""}],
-        step: {title:"", description:""}
-    },
+        steps: [],
+        step: {title: "", description: ""}
+        },
 
-    mounted() {
-        this.cachedUser = Object.assign({}, this.user);
-    },
     methods: {
 
+        edit: function(idx){
+            this.showModal = true;
+            this.step.title = this.steps[idx].title;
+            this.step.description = this.steps[idx].description;
+            this.editIndex = idx;
+        },
+
+        toggle: function(index){
+            this.activeIndex = index
+        },
         save() {
             this.cachedUser = Object.assign({}, this.user);
             this.isEditing = false;
@@ -26,45 +40,23 @@ new Vue({
         },
 
         addNewStep() {
-            let newStep = {
-                title: this.step.title,
-                description: this.step.description
-            };
+            if (this.editIndex === null) {
+                this.steps.push(this.step);
+            } else {
+                this.steps[this.editIndex] = this.step;
+            }
 
-            this.steps.push(newStep);
+            this.showModal = false;
+            this.step = {};
+            this.editIndex = null;
+
+        },
+        cancelModal(){
+          this.step = {};
+          this.showModal = false;
         }
-
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-let modal = document.getElementById('myModal');
-let btn = document.getElementById("myBtn");
-let span = document.getElementsByClassName("close")[0];
-
-btn.onclick = function() {
-    modal.style.display = "block";
-};
-span.onclick = function() {
-    modal.style.display = "none";
-};
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-};
-
 
 //Map initialization
 function initMap() {
@@ -190,7 +182,6 @@ function initMap() {
         placeMarker(event.latLng);
 
     });
-
 
 
 //Search bar function with autocomplete feature, marker added to location entered in the search bar.
