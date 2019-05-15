@@ -62,13 +62,12 @@ function initMap() {
     let currentMarker;
     let currentInfowindow;
     let addNewMarkerClicked = false;
-    let color = 'red';
-    let type = 'original';
 
     function placeMarker(location) {
-        console.log("placeMarker");
+        let color = 'red';
+        let type = 'original';
         let marker;
-        let infowindow = new google.maps.InfoWindow();
+        let infowindow;
         if (currentMarker && !addNewMarkerClicked) {
             marker = currentMarker;
             marker.setPosition(location);
@@ -85,17 +84,28 @@ function initMap() {
                 size: new google.maps.Size(30, 38),
                 scaledSize: new google.maps.Size(30, 38),
             });
+
+            if (currentInfowindow) {
+                currentInfowindow.close();
+            }
         }
         google.maps.event.addListener(marker, 'click', function () {
-            infowindow.open(map, marker);
             infowindow.setPosition(event.latLng);
 
         });
+        google.maps.event.addListener(marker, 'click', function() {
+
+            if (currentInfowindow) {
+                currentInfowindow.close();
+            }
+            infowindow.open(map, marker);
+            currentInfowindow = infowindow;
+        });
 
         let contentElement = document.createElement("div");
-        contentElement.innerHTML = '<div class="innerHTML"><h4>Want to place a marker?</h4>' + '' +
-            '' + '<div class="yes-no-buttons"><button id="add-new-marker">YES</button>' + '' +
-            '' + '<button id="delete-new-marker">NO</button></div></div>';
+        contentElement.innerHTML = '<div class="innerHTML"><h4>Place a marker?</h4>' + '' +
+            '' + '<div class="yes-no-buttons"><button id="add-new-marker">Yes</button>' + '' +
+            '' + '<button id="delete-new-marker">No</button></div></div>';
         let editElement = document.createElement("div");
         editElement.innerHTML = '<div class="innerHTML">' +
             '<h4 style=" font-size:10px; padding:2px; margin: 0;  text-align: left">' +
@@ -118,8 +128,8 @@ function initMap() {
             '<button style="padding: 0; margin: 0;" id="purple"> </button> ' +
             '<button style="padding: 0; margin: 0;" id="black"> </button> ' +
             '<button style="padding: 0; margin: 0;" id="grey"> </button> ' +
-            '<button id="red"> </button></div>' +
-            '<br><button style="margin: 0; padding:0;" id="delete-marker">delete</button>';
+            '<button style="padding: 0; margin: 0;" id="red"> </button></div>' +
+            '<br><button id="delete-marker">Delete</button>';
 
         editElement.querySelector('.marker-style').addEventListener('click', function (event) {
             if (event.target.tagName === 'INPUT') {
@@ -149,7 +159,6 @@ function initMap() {
         } else {
             infowindow = new google.maps.InfoWindow({
                 content: contentElement,
-
             });
             infowindow.open(map, marker);
             currentInfowindow = infowindow;
@@ -165,7 +174,6 @@ function initMap() {
             editElement.addEventListener('click', function (event) {
                 if (event.target.tagName === 'BUTTON' && event.target.id === 'delete-marker') {
                     marker.setMap(null);
-                    marker = null;
                     addNewMarkerClicked = true;
                 }
             });
