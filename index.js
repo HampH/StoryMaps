@@ -8,70 +8,57 @@ new Vue({
         activeIndex: null,
         editIndex: null,
         showModal: false,
-        isEditing: false,
-        user: {
-            mapTitle: 'Add a title to your map',
-            mapDescription: 'Add a description to your map',
-        },
+        openModal: false,
         steps: [],
         step: {title: "", description: ""}
         },
 
-    methods: {
+    methods:
+        {
+            edit(idx) {
+                this.showModal = true;
+                this.step.title = this.steps[idx].title;
+                this.step.description = this.steps[idx].description;
+                this.editIndex = idx;
+            },
 
-        edit: function(idx){
-            this.showModal = true;
-            this.step.title = this.steps[idx].title;
-            this.step.description = this.steps[idx].description;
-            this.editIndex = idx;
-        },
+            toggle(index) {
+                this.activeIndex = index
+            },
 
-        toggle: function(index){
-            this.activeIndex = index
-        },
-        save() {
-            this.cachedUser = Object.assign({}, this.user);
-            this.isEditing = false;
+            addNewStep() {
+                if (this.editIndex === null) {
+                    this.steps.push(this.step);
+                } else {
+                    this.steps[this.editIndex] = this.step;
+                }
+                this.showModal = false;
+                this.step = {};
+                this.editIndex = null;
+            },
 
-        },
-        cancel() {
-            this.user = Object.assign({}, this.cachedUser);
-            this.isEditing = false;
-        },
-
-        addNewStep() {
-            if (this.editIndex === null) {
-                this.steps.push(this.step);
-            } else {
-                this.steps[this.editIndex] = this.step;
+            cancelModal() {
+                this.step = {};
+                this.showModal = false;
+                this.editIndex = null;
             }
-
-            this.showModal = false;
-            this.step = {};
-            this.editIndex = null;
-
-        },
-        cancelModal(){
-          this.step = {};
-          this.showModal = false;
         }
-    }
 });
 
 //Map initialization
 function initMap() {
-    let map = new google.maps.Map(document.getElementById('map'), {
+    let map;
+    map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 50, lng: 1},
         zoom: 4,
         mapTypeControl: false,
         streetViewControl: false,
-        rightClicked: false,
         draggableCursor: 'crosshair',
         draggingCursor: 'move',
         disableDefaultUI: true,
         zoomControl: true,
+        panControl: false,
     });
-
     let currentMarker;
     let currentInfowindow;
     let addNewMarkerClicked = false;
@@ -79,157 +66,141 @@ function initMap() {
     let type = 'original';
 
     function placeMarker(location) {
+        console.log("placeMarker");
         let marker;
-        let infowindow;
+        let infowindow = new google.maps.InfoWindow();
         if (currentMarker && !addNewMarkerClicked) {
             marker = currentMarker;
             marker.setPosition(location);
+
         } else {
             marker = new google.maps.Marker({
                 position: location,
                 map: map,
+                draggable: true
             });
             currentMarker = marker;
             marker.setIcon({
-                url: '../images/' + color + '-' + type + '-marker.png',
+                url: 'images/' + color + '-' + type + '-marker.png',
                 size: new google.maps.Size(30, 38),
                 scaledSize: new google.maps.Size(30, 38),
             });
         }
-        google.maps.event.addListener(marker, 'click', function() {
-            infowindow.open(map,this);
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+            infowindow.setPosition(event.latLng);
+
         });
+
         let contentElement = document.createElement("div");
-        contentElement.innerHTML = '<div class="innerHTML"><h4>Want to place a marker?</h4>'+
-            '<button id="add-new-marker">Yes</button></div>';
-
+        contentElement.innerHTML = '<div class="innerHTML"><h4>Want to place a marker?</h4>' + '' +
+            '' + '<div class="yes-no-buttons"><button id="add-new-marker">YES</button>' + '' +
+            '' + '<button id="delete-new-marker">NO</button></div></div>';
         let editElement = document.createElement("div");
-        editElement.innerHTML = '<div class="innerHTML" style="text-align: center">' +
-            '<br><h4 style="padding:0; padding-left: 5px; padding-right: 5px; margin-top: 0;">Style your marker</h4>' +
+        editElement.innerHTML = '<div class="innerHTML">' +
+            '<h4 style=" font-size:10px; padding:2px; margin: 0;  text-align: left">' +
+            'Latitude:' + marker.getPosition().lat().toFixed(2) + '</h4>' +
+            '<h4 style="font-size: 10px; padding:2px; margin: 0;  text-align: left">' +
+            'Longitude:' + marker.getPosition().lng().toFixed(2) + '</h4>' +
+
+            '<br><h4 style="padding:0; margin: 0; text-align: left;">Marker</h4>' +
             '<div class="marker-style"> ' +
-            '<input alt="image" type="image" src="../images/black-original-marker.png" style="width:17px; height:23px;" name="marker" id="original" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/black-exclamation-marker.png" style="width:17px; height:23px;"  name="marker" id="exclamation" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/black-question-marker.png" style="width:17px; height:23px;"  name="marker" id="question" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/black-x-marker.png" style="width:17px; height:23px;"  name="marker" id="x" /> ' + ' ' +
-            '<input alt="image" type="image" src="../images/black-empty-marker.png" style="width:17px; height:23px;"  name="marker" id="empty" /></div> ' + ' ' +
-            '<br><h4>Color</h4>' +
+            '<input alt="image" type="image" src="images/black-original-marker.png" style="width:17px; height:23px; padding: 0; margin: 0;" name="marker" id="original" /> ' + ' ' +
+            '<input alt="image" type="image" src="images/black-exclamation-marker.png" style="width:17px; height:23px;"  name="marker" id="exclamation" /> ' + ' ' +
+            '<input alt="image" type="image" src="images/black-question-marker.png" style="width:17px; height:23px;"  name="marker" id="question" /> ' + ' ' +
+            '<input alt="image" type="image" src="images/black-x-marker.png" style="width:17px; height:23px;"  name="marker" id="x" /> ' + ' ' +
+            '<input alt="image" type="image" src="images/black-empty-marker.png" style="width:17px; height:23px; margin-bottom: 0; padding-bottom: 0;"  name="marker" id="empty" /></div> ' + ' ' +
+            '<br><h4 style="text-align: left; margin: 0; padding: 0;">Color</h4>' +
             '<div class="marker-colors">' +
-            '<button id="blue"> </button> ' +
-            '<button id="green"> </button> ' +
-            '<button id="yellow"> </button> ' +
-            '<button id="purple"> </button> ' +
-            '<br><button id="black"> </button> ' +
-            '<button id="grey"> </button> ' +
+            '<button style="padding: 0; margin: 0;" id="blue"> </button> ' +
+            '<button style="padding: 0; margin: 0;" id="green"> </button> ' +
+            '<button style="padding: 0; margin: 0;" id="yellow"> </button> ' +
+            '<button style="padding: 0; margin: 0;" id="purple"> </button> ' +
+            '<button style="padding: 0; margin: 0;" id="black"> </button> ' +
+            '<button style="padding: 0; margin: 0;" id="grey"> </button> ' +
             '<button id="red"> </button></div>' +
+            '<br><button style="margin: 0; padding:0;" id="delete-marker">delete</button>';
 
-            '<br><button id="delete-marker">delete</button>';
-
-        editElement.querySelector('.marker-style').addEventListener('click', function(event) {
+        editElement.querySelector('.marker-style').addEventListener('click', function (event) {
             if (event.target.tagName === 'INPUT') {
                 type = event.target.id;
-
                 marker.setIcon({
-                    url: '../images/' + color + '-' + type + '-marker.png',
+                    url: 'images/' + color + '-' + type + '-marker.png',
                     size: new google.maps.Size(30, 38),
                     scaledSize: new google.maps.Size(30, 38)
                 });
-                console.log(event.target.id);
             }
-        })
+        });
 
-        editElement.querySelector('.marker-colors').addEventListener('click', function(event) {
+        editElement.querySelector('.marker-colors').addEventListener('click', function (event) {
             if (event.target.tagName === 'BUTTON') {
                 color = event.target.id;
-
                 marker.setIcon({
-                        url: '../images/' + color + '-' + type + '-marker.png',
-                        size: new google.maps.Size(30, 38),
-                        scaledSize: new google.maps.Size(30, 38)
-                    });
-                console.log(event.target.id);
+                    url: 'images/' + color + '-' + type + '-marker.png',
+                    size: new google.maps.Size(30, 38),
+                    scaledSize: new google.maps.Size(30, 38)
+                });
             }
-        })
+        });
 
         if (currentInfowindow && !addNewMarkerClicked) {
             infowindow = currentInfowindow;
             infowindow.setContent(contentElement);
-
-        }
-        else {
+        } else {
             infowindow = new google.maps.InfoWindow({
                 content: contentElement,
-                buttons: { close: { visible: false } }
 
             });
             infowindow.open(map, marker);
             currentInfowindow = infowindow;
         }
-        contentElement.addEventListener('click', function(event) {
-            if (event.target.tagName === 'BUTTON') {
+        contentElement.querySelector('.yes-no-buttons').addEventListener('click', function (event){
+            if (event.target.id === 'delete-new-marker') {
+                marker.setMap(null);
                 addNewMarkerClicked = true;
-
-                editElement.addEventListener('click', function(event){
-                    if (event.target.tagName === 'BUTTON' && event.target.id === 'delete-marker') {
-                        marker.setMap(null);
-                    }
-                })
-                infowindow.setContent(editElement);
             }
+            if (event.target.id === 'add-new-marker') {
+                addNewMarkerClicked = true;
+            }
+            editElement.addEventListener('click', function (event) {
+                if (event.target.tagName === 'BUTTON' && event.target.id === 'delete-marker') {
+                    marker.setMap(null);
+                    marker = null;
+                    addNewMarkerClicked = true;
+                }
+            });
+            infowindow.setContent(editElement);
+
         });
         addNewMarkerClicked = false;
     }
-    google.maps.event.addListener(map, 'click', function(event) {
+    google.maps.event.addListener(map, 'click', function (event) {
         placeMarker(event.latLng);
-
     });
 
 
-//Search bar function with autocomplete feature, marker added to location entered in the search bar.
-
+//Search bar function with autocomplete feature, marker with title added to location entered in the search bar.
     let input = document.getElementById('pac-input');
     let searchBox = new google.maps.places.SearchBox(input);
+
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    map.addListener('bounds_changed', function() {
-        searchBox.setBounds(map.getBounds());
-    });
-    let markers = [];
-    searchBox.addListener('places_changed', function() {
+
+    searchBox.addListener('places_changed', function () {
         let places = searchBox.getPlaces();
-        if (places.length == 0) {
+        if (places.length === 0) {
             return;
         }
-        markers.forEach(function(marker) {
-            marker.setMap(null);
-        });
-        markers = [];
         let bounds = new google.maps.LatLngBounds();
-        places.forEach(function(place) {
-            if (!place.geometry) {
-                console.log("Returned place contains no geometry");
-                return;
-            }
-            let icon = {
-                url: place.icon,
-                size: new google.maps.Size(71, 71),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(25, 25)
-            };
-            markers.push(new google.maps.Marker({
-                map: map,
-                icon: icon,
-                title: place.name,
-                position: place.geometry.location
-            }));
+        places.forEach(function (place) {
+            console.log(place);
 
-            if (place.geometry.viewport) {
-                bounds.union(place.geometry.viewport);
-            } else {
+            placeMarker(place.geometry.location);
+
+            if (place.geometry.location) {
                 bounds.extend(place.geometry.location);
             }
         });
         map.fitBounds(bounds);
     });
-
 }
-
+google.maps.event.addDomListener.window.load(initMap());
