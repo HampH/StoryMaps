@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="EN-en SV-sv" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+  <title>StoryMaps</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-Bx4pytHkyTDy3aJKjGkGoHPt3tvv6zlwwjc3iqN7ktaiEMLDPqLSZYts2OjKcBx1" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/create-map.css">
+  </head>
+  <body>
+
+  <input id="pac-input" class="controls" type="text" placeholder="What are you looking for?">
+
+  <div id="map"></div>
+  <h1 class="storymaps-title">StoryMaps</h1>
+  <div id="menu">
+    <div class="top-buttons">
+      <button id="myBtn-1" onclick="location.href='index.html'"><i class="far fa-save"></i>Save</button>
+      <button id="myBtn-2" onclick="location.href='index.html'"><i class="far fa-eye"></i>Preview</button>
+    </div>
+
+
+    <div id="app">
+      <ul class="experiences">
+        <li v-for="(step, idx) in steps"  v-on:click="toggle(idx)" v-bind:checked="step.done" :class="{'active-li': idx == activeIndex}">
+          <h4 class="step-title">{{ step.title }}<i class="far fa-pencil" @click="edit(idx)"></i></h4><br>
+          <p class="step-description" >{{ step.description }}</p>
+        </li>
+      </ul>
+
+
+      <transition name="modal" @close='showModal = !showModal'>
+        <div class="modal-mask" v-show="showModal">
+          <div class="modal-wrapper">
+            <div class="modal-container">
+              <form v-on:submit.prevent="addNewStep">
+                <h3>Step title</h3>
+                <input class="addTitle" placeholder="Add the title to your step" v-model="step.title"/>
+                <h3>Step description</h3>
+                <textarea class="addDescription" placeholder="Don't forget your description" v-model="step.description"></textarea><br>
+                <div class="OK-cancel-buttons">
+                  <button class="generic" type="submit">OK</button>
+                  <span class="close" v-on:click="cancelModal">Cancel</span>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </transition>
+      <div class="addStep-button">
+        <button id="myBtn" @click="showModal = true">Add step</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.min.js"></script>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaNv0j-dS57AWtwnTJ93mWIXJrINNZg4w&libraries=places&callback=initMap"></script>
+  </body>
+</html>
